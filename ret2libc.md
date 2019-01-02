@@ -106,6 +106,7 @@ gcc filename.c -o outputname -fno-stack-protector
 
     gdb ./nomeDoArquivo
 *Sua saída deve ser parecida com esta:*![screenshotgdb](https://i.imgur.com/GH0kA7N.png)
+
 *Agora, vamos definir alguns breakpoints para facilitar a depuração. A linha 22, por exemplo, é uma ótima opção, pois neste estágio do programa, nossos parâmetros já foram recebidos e processados, porém ainda não foi imprimido. para definirmos o breakpoint na linha 22, precisamos de um código absurdamente complexo, como pode ser visto abaixo:*
 
 `(gdb) break 22`
