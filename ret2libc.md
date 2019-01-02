@@ -1,4 +1,5 @@
 
+
 # WTF is ret2libc?
 *Após um certo tempo exploração stack-based overflow tradicional, a curiosidade em desbravar novas possibilidades sempre surge. Caso nunca dantes tenha tido quaisquer questionamentos, deixe-me que lhe apresente uma questão:*
 *Como bem sabe-se, a exploração tradicional consiste em executarmos um shellcode que empilhamos na stack. Certo, mas, e se a pilha não for executável? Desta forma, de nada nos seria útil retornar o shellcode, pois o mesmo nunca seria executado. O nome deste bloqueio é [NX bit(Non eXecute)](http://en.wikipedia.org/wiki/NX_bit), E neste pequeno tutorial, o objetivo é exemplificar como podemos dar um certo bypass e ter uma execução de código arbitrário.*
@@ -105,7 +106,10 @@ gcc filename.c -o outputname -fno-stack-protector
 ## The gdb world
 
     gdb ./nomeDoArquivo
-*Sua saída deve ser parecida com esta:*![screenshotgdb](https://i.imgur.com/GH0kA7N.png)
+
+*Sua saída deve ser parecida com esta:*
+
+![screenshotgdb](https://i.imgur.com/GH0kA7N.png)
 
 *Agora, vamos definir alguns breakpoints para facilitar a depuração. A linha 22, por exemplo, é uma ótima opção, pois neste estágio do programa, nossos parâmetros já foram recebidos e processados, porém ainda não foi imprimido. para definirmos o breakpoint na linha 22, precisamos de um código absurdamente complexo, como pode ser visto abaixo:*
 
@@ -132,6 +136,7 @@ gcc filename.c -o outputname -fno-stack-protector
 
 *Certo, agora que atingimos nosso breakpoint, podemos parar e analizar a memória. Mais específicamente a **stack frame** que é onde nosso payload vai estar, bem como o **EIP***
 `(gdb) x / 32x $ esp`
+
 ![gdsc](https://i.imgur.com/nZdulIl.png)
 
 *Boom! aí estão nossos **A's**. E o melhor, estão exatamente onde nós o colocamos na stack-frame. Nossos **A's** começam no endereço **0xbffff77c** e vão até **0xbffff77f**. Ótimo, agora que ja temos esta informação, basta procuramos o **EIP** para descobrirmos o tamanho do nosso payload.*
@@ -192,7 +197,7 @@ gcc filename.c -o outputname -fno-stack-protector
         Meuload = "A" * padding + endereço_system + "LMAO"
         MeuPayload = open("payload.txt", "w")
         MeuPayload.write(payload)
-        thePayload.close()
+        MeuPayload.close()
         os.system("cat payload.txt | NomeArquivoCComplilado")
     
     main()
@@ -217,11 +222,13 @@ gcc filename.c -o outputname -fno-stack-protector
         char *endereco= getenv("SHELL");
         printf("sh ta em %p\n",endereco);
     }
+
 `gcc -o OutputName ProgramName`
 
 `chmod +x OutputName`
 
 `./OutputName`
+
 *Nossa Saída:*
 
 `> ./vem_sh`
@@ -247,7 +254,11 @@ gcc filename.c -o outputname -fno-stack-protector
     main()
 
 ![gotit](https://i.imgur.com/4s2HuZD.png)
+
 *BOOOOM! sucess.*
+## Considerações finais
+*Com isto, conseguimos nossa shell explorando o ret2libc e finalizamos nossa pequena introdução à um dos meios exploração stack-based, "**e nunca executamos nenhum código na stack**". Lembrando, claro, que este não é o único modo de se explorar funções da libc, entretanto, é de fato o mais conhecido e comum de se encontrar em desafios de [CTF](https://github.com/d1stopic/writeups) de níveis não tão altos de proteção. Espero que, de alguma maneira, esta postagem lhe seja útil na vida, ou em algum ctf mundo afora. No demais, **Lets [pwn](https://github.com/d1stopic/writeups/tree/master/pwn) the world!***
+
 ## Recomendações e referências
 ### recomendações para melhor entendimento:
 * [System manual](http://man7.org/linux/man-pages/man3/system.3.html)
@@ -259,6 +270,6 @@ gcc filename.c -o outputname -fno-stack-protector
 * [ret2libc with a Buffer Overflow BY Live Overflow](https://www.youtube.com/watch?v=m17mV24TgwY)
 * [Defeating a non-executable stack pdf](https://www.shellblade.net/docs/ret2libc.pdf)
 ---
--- *"**Vamo ownar o mundo, porquê alcançar a paz tá difícil.**"*
-
-Luther King, MARTIN 1940
+- *"**Vamo ownar o mundo, porquê alcançar a paz tá difícil pra cassete.**"*
+            
+    Luther King, MARTIN 1940.
