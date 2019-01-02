@@ -102,7 +102,7 @@ gcc filename.c -o outputname -fno-stack-protector
 * E na linha 17, surge o nosso "probleminha". Uma estrutura condicional um tanto curiosa: Ela está usando uma operação [Bitwise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Bitwise_Operators) para verificar se o endereço armazenado no **EIP** começa com o byte "**0xbf**". Se o endereço começar com este byte, o programa para a execução.
 
 *Ok, acho que o estagiário provou seu valor. essa estrutura condicional nos diz que não podemos sobrescrever **EIP** com nenhum endereço que comece com "**0xbf**". E, isso é um problemão, porque neste caso, todo e qualquer shellcode que poderíamos usar para sobrescrever, estaria na nossa Stack, e iniciaria com **0xbf**. Mas, não priemos cânico, vamos primeiramente nos preocupar com sobrescrever o **EIP** com qualquer coisa.*
-## The gdb wolrd
+## The gdb world
 
     gdb ./nomeDoArquivo
 *Sua saída deve ser parecida com esta:*![screenshotgdb](https://i.imgur.com/GH0kA7N.png)
@@ -220,6 +220,7 @@ gcc filename.c -o outputname -fno-stack-protector
 *Nossa Saída:*
 
 `> ./vem_sh`
+
 `sh esta em 00000000 0xbffff9de`
 
 *Sucesso total! Temos tudo que precisamos para montar nosso script. Vamos, então, modifica-lo pela última vez!*
