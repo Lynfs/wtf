@@ -107,10 +107,13 @@ gcc filename.c -o outputname -fno-stack-protector
     gdb ./nomeDoArquivo
 *Sua saída deve ser parecida com esta:*![screenshotgdb](https://i.imgur.com/GH0kA7N.png)
 *Agora, vamos definir alguns breakpoints para facilitar a depuração. A linha 22, por exemplo, é uma ótima opção, pois neste estágio do programa, nossos parâmetros já foram recebidos e processados, porém ainda não foi imprimido. para definirmos o breakpoint na linha 22, precisamos de um código absurdamente complexo, como pode ser visto abaixo:*
-`(gdb) break 22
-`
+
+`(gdb) break 22`
+
 `Breakpoint 1 at 0x401060: file /home/ruben/mingw-w64/src/mingw-w64/mingw-w64-crt/crt/crtexe.c, line 22.`
+
 `(gdb)`
+
 
 *Difícil, não?Bem, vamos continuar. Para enviarmos nosso arquivo **payload.txt** criado pelo arquivo **.py**, usamos o romando:*
 
