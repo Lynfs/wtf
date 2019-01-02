@@ -138,7 +138,9 @@ gcc filename.c -o outputname -fno-stack-protector
 `p 0xbffff7cc - 0xbffff77c`
 
 `(gdb) p 0xbffff7cc - 0xbffff77c`
+
 `$1 = 80`
+
 `(gdb)`
 
 *80.  E caso você se pergunte: "Qual a utilidade deste 80?", esta é a quantidade de **A's** para nosso overflow até **EIP**. Mas, atenção: isto não fará com que **EIP** seja sobrescrito, porém, estará à 1 byte de o fazer.*
