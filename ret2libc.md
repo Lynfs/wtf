@@ -130,7 +130,9 @@ gcc filename.c -o outputname -fno-stack-protector
 ![gdsc](https://i.imgur.com/nZdulIl.png)
 *Boom! aí estão nossos **A's**. E o melhor, estão exatamente onde nós o colocamos na stack-frame. Nossos **A's** começam no endereço **0xbffff77c** e vão até **0xbffff77f**. Ótimo, agora que ja temos esta informação, basta procuramos o **EIP** para descobrirmos o tamanho do nosso payload.*
 `(gdb) info frame`
+
 ![gdbeip](https://i.imgur.com/FmPRmXG.png)
+
 *Sucesso! agora sabemos que o **EIP** está no endereço de memória **0xbffff7cc** (destacado em vermelho) e contém o endereço **0x08048505** (realçado em verde). E, olha só, não está tão distante do nosso endereço inicial. Podemos checar a distancia entre eles com o seguinte comando:*
 `p 0xbffff7cc - 0xbffff77c`
 
