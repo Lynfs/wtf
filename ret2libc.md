@@ -180,7 +180,7 @@ gcc filename.c -o outputname -fno-stack-protector
 *Este comando nos retornará, não só informações básicas da função **system**, como seu endereço.*
 ![infosys](https://i.imgur.com/jhUSEUr.png)
 
-*Sensacional, não? Bem, vamos modifica rnosso script novamente:*
+*Sensacional, não? Bem, vamos modificar nosso script novamente:*
 
     #!/usr/bin/env python
     import os
