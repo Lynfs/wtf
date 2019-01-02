@@ -133,6 +133,7 @@ gcc filename.c -o outputname -fno-stack-protector
 *Certo, agora que atingimos nosso breakpoint, podemos parar e analizar a memória. Mais específicamente a **stack frame** que é onde nosso payload vai estar, bem como o **EIP***
 `(gdb) x / 32x $ esp`
 ![gdsc](https://i.imgur.com/nZdulIl.png)
+
 *Boom! aí estão nossos **A's**. E o melhor, estão exatamente onde nós o colocamos na stack-frame. Nossos **A's** começam no endereço **0xbffff77c** e vão até **0xbffff77f**. Ótimo, agora que ja temos esta informação, basta procuramos o **EIP** para descobrirmos o tamanho do nosso payload.*
 
 `(gdb) info frame`
