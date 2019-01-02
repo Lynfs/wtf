@@ -1,3 +1,4 @@
+
 # WTF is ret2libc?
 *Após um certo tempo exploração stack-based overflow tradicional, a curiosidade em desbravar novas possibilidades sempre surge. Caso nunca dantes tenha tido quaisquer questionamentos, deixe-me que lhe apresente uma questão:*
 *Como bem sabe-se, a exploração tradicional consiste em executarmos um shellcode que empilhamos na stack. Certo, mas, e se a pilha não for executável? Desta forma, de nada nos seria útil retornar o shellcode, pois o mesmo nunca seria executado. O nome deste bloqueio é [NX bit(Non eXecute)](http://en.wikipedia.org/wiki/NX_bit), E neste pequeno tutorial, o objetivo é exemplificar como podemos dar um certo bypass e ter uma execução de código arbitrário.*
@@ -173,6 +174,7 @@ gcc filename.c -o outputname -fno-stack-protector
 `(gdb) p system`
 *Este comando nos retornará, não só informações básicas da função **system**, como seu endereço.*
 ![infosys](https://i.imgur.com/jhUSEUr.png)
+
 *Sensacional, não? Bem, vamos modifica rnosso script novamente:*
 
     #!/usr/bin/env python
@@ -192,7 +194,7 @@ gcc filename.c -o outputname -fno-stack-protector
 *Fizemos duas modificações: Uma delas foi adicionar o endereço de system ao nosso script, e a segunda pode lhe parecer estranha, mas eu já explico.*
 
 *Por padrão, nosso payload deve seguir uma forma de construção:*
-**[QuantBytesPraEIP] | [EndereçoFuncaoSystem] | [4 Bytes Quaisquer] | [Endereço de /bin/sh]*. Isso ocorre por conta da [Função próloga](https://en.wikipedia.org/wiki/Function_prologue), basicamente uma preparação que informa qual a stack frame a função irá utilizar. O primeiro argumento para a função do sistema ocorre quatro bytes após a chamada inicial para a função. A princípio, não nos interessa o porquê, apenas tomemos como verdade e sigamos em frente!*
+**[QuantBytesPraEIP] | [EndereçoFuncaoSystem] | [4 Bytes Quaisquer] | [Endereço de /bin/sh]***. Isso ocorre por conta da [Função próloga](https://en.wikipedia.org/wiki/Function_prologue), basicamente uma preparação que informa qual a stack frame a função irá utilizar. O primeiro argumento para a função do sistema ocorre quatro bytes após a chamada inicial para a função. A princípio, não nos interessa o porquê, apenas tomemos como verdade e sigamos em frente!*
 ## /bin/sh, where r u?
 *Para encontramos este bendito endereço de bin/sh, existe mais de uma forma. em exemplos na web afora, pode-se encontrar coisas do tipo:*
 *   `x/s *(environ++) `
@@ -216,6 +218,7 @@ gcc filename.c -o outputname -fno-stack-protector
 
 `./OutputName`
 *Nossa Saída:*
+
 `> ./vem_sh`
 `sh esta em 00000000 0xbffff9de`
 
@@ -251,4 +254,5 @@ gcc filename.c -o outputname -fno-stack-protector
 * [Defeating a non-executable stack pdf](https://www.shellblade.net/docs/ret2libc.pdf)
 ---
 -- *"**Vamo ownar o mundo, porquê alcançar a paz tá difícil.**"*
+
 Luther King, MARTIN 1940
