@@ -183,6 +183,7 @@ gcc filename.c -o outputname -fno-stack-protector
 *Para encontramos o endereço da função system, reiniciamos nossa aplicação, redefinimos o breakpoint, digitamos qualquer coisa no input, ex("AAAA") e quando atingirmos o break, utilizamos o comando:*
 `(gdb) p system`
 *Este comando nos retornará, não só informações básicas da função **system**, como seu endereço.*
+
 ![infosys](https://i.imgur.com/jhUSEUr.png)
 
 *Sensacional, não? Bem, vamos modificar nosso script novamente:*
