@@ -1,8 +1,9 @@
 
 
+
 # WTF is ret2libc?
 *Após um certo tempo exploração stack-based overflow tradicional, a curiosidade em desbravar novas possibilidades sempre surge. Caso nunca dantes tenha tido quaisquer questionamentos, deixe-me que lhe apresente uma questão:*
-*Como bem sabe-se, a exploração tradicional consiste em executarmos um shellcode que empilhamos na stack. Certo, mas, e se a pilha não for executável? Desta forma, de nada nos seria útil retornar o shellcode, pois o mesmo nunca seria executado. O nome deste bloqueio é [NX bit(Non eXecute)](http://en.wikipedia.org/wiki/NX_bit), E neste pequeno tutorial, o objetivo é exemplificar como podemos dar um certo bypass e ter uma execução de código arbitrário.*
+*Como bem sabe-se, a exploração tradicional consiste em executarmos um shellcode que empilhamos na stack. Certo, mas, e se a pilha não for executável? Desta forma, de nada nos seria útil retornar o shellcode, pois o mesmo nunca seria executado. O nome deste bloqueio é [NX bit(Non eXecute)](http://en.wikipedia.org/wiki/NX_bit), E neste pequeno tutorial, o objetivo é exemplificar como podemos dar um certo bypass e ter uma execução de código arbitrário, não no próprio **NXbit**, haja vista que o mesmo é definido em tempo de compilação, e, o nosso exemplo utiliza apernas uma simples verificação condicional. Semelhante, porém não igual. *
 *Então, recomendo que pegue pipoca, algo para beber e se sente, pois temos um caminho deveras cansativo de explicação e exemplificação.*
 ## Let's Start
 
@@ -99,10 +100,10 @@ gcc filename.c -o outputname -fno-stack-protector
 ### explaining the C code
 * Nas Linhas **8** e **9** Vemos duas variáveis definidas: A primeira se chama "**buffer**", um array que recebe um tamanho máximo de **64 bytes**, e a segunda é uma inteira chamada **" ret "**.
 * Na linha **11,** o programa solicita a entrada do usuário e, na linha 13, essa entrada é passada para a variável buffer. E sim, não há verificação alguma se nossa entrada possui, de fato, no máximo 64 bytes. Mas, não vamos contar à gestão o que o estagiário anda fazendo, vai ser o nosso segredo.
-* Na linha **15** podemos ver a variável **ret** , e um valor meio estranho, chamado **__builtin_return_address (0)**. Isto simplesmente é uma referencia ao registrador **EIP**.  Beleza, eu sei que o estagiário está passando dos limites armazenando isto em uma variável, mas, dê uma chance de ele provar o seu valor.
-* E na linha 17, surge o nosso "probleminha". Uma estrutura condicional um tanto curiosa: Ela está usando uma operação [Bitwise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Bitwise_Operators) para verificar se o endereço armazenado no **EIP** começa com o byte "**0xbf**". Se o endereço começar com este byte, o programa para a execução.
+* Na linha **15** podemos ver a variável **ret** , e um valor meio estranho, chamado **__builtin_return_address (0)**. Isto simplesmente é uma referencia ao **Endereço de retorno**.  Beleza, eu sei que o estagiário está passando dos limites armazenando isto em uma variável, mas, dê uma chance de ele provar o seu valor.
+* E na linha 17, surge o nosso "probleminha". Uma estrutura condicional um tanto curiosa: Ela está usando uma operação [Bitwise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Bitwise_Operators) para verificar se o endereço de retorno foi sobrescrito com o byte "**0xbf**". Se o endereço começar com este byte, o programa para a execução.
 
-*Ok, acho que o estagiário provou seu valor. essa estrutura condicional nos diz que não podemos sobrescrever **EIP** com nenhum endereço que comece com "**0xbf**". E, isso é um problemão, porque neste caso, todo e qualquer shellcode que poderíamos usar para sobrescrever, estaria na nossa Stack, e iniciaria com **0xbf**. Mas, não priemos cânico, vamos primeiramente nos preocupar com sobrescrever o **EIP** com qualquer coisa.*
+*Ok, acho que o estagiário provou seu valor. essa estrutura condicional nos diz que não podemos sobrescrever **EIP** com nenhum endereço que comece com "**0xbf**". E, isso é um problemão, porque neste caso, todo e qualquer shellcode que poderíamos usar para sobrescrever, estaria na nossa Stack, e iniciaria com **0xbf**, pois **0xbf** é o inicio do endereçamento da stack dada ao processo em execução. Mas, não priemos cânico, vamos primeiramente nos preocupar com sobrescrever o **EIP** com qualquer coisa.*
 ## The gdb world
 
     gdb ./nomeDoArquivo
@@ -205,7 +206,7 @@ gcc filename.c -o outputname -fno-stack-protector
 *Fizemos duas modificações: Uma delas foi adicionar o endereço de system ao nosso script, e a segunda pode lhe parecer estranha, mas eu já explico.*
 
 *Por padrão, nosso payload deve seguir uma forma de construção:*
-**[QuantBytesPraEIP] | [EndereçoFuncaoSystem] | [4 Bytes Quaisquer] | [Endereço de /bin/sh]***. Isso ocorre por conta da [Função próloga](https://en.wikipedia.org/wiki/Function_prologue), basicamente uma preparação que informa qual a stack frame a função irá utilizar. O primeiro argumento para a função do sistema ocorre quatro bytes após a chamada inicial para a função. A princípio, não nos interessa o porquê, apenas tomemos como verdade e sigamos em frente!*
+**[QuantBytesPraEIP] | [EndereçoFuncaoSystem] | [4 Bytes Quaisquer] | [Endereço de /bin/sh]***. Isso ocorre por conta da [Função próloga](https://en.wikipedia.org/wiki/Function_prologue), basicamente uma preparação que informa qual a stack frame a função irá utilizar. O primeiro argumento para a função do sistema ocorre quatro bytes após a chamada inicial para a função, pois, não podemos dar um CALL em uma função, mas podemos simular algo parecido. Logo após sobrescrevermos o endereço de retorno com o endereço da função system, estamos "simulando" um **CALL** na mesma, então, a arquitetura "pede" um endereço de retorno para retornar aquela função. Para a exploração em questão, a utilização de um "JUNK" de 4 bytes já nos basta, pois teoricamente não precisaremos retornar para nada após a execução do shellcode. A princípio, não nos interessa adentrarmos no porquê de cada detalhe, apenas tomemos como verdade e sigamos em frente!*
 ## /bin/sh, where r u?
 *Para encontramos este bendito endereço de bin/sh, existe mais de uma forma. em exemplos na web afora, pode-se encontrar coisas do tipo:*
 *   `x/s *(environ++) `
@@ -234,7 +235,7 @@ gcc filename.c -o outputname -fno-stack-protector
 
 `> ./vem_sh`
 
-`sh esta em 00000000 0xbffff9de`
+`sh esta em 0xbffff9de`
 
 *Sucesso total! Temos tudo que precisamos para montar nosso script. Vamos, então, modifica-lo pela última vez!*
 
@@ -271,6 +272,6 @@ gcc filename.c -o outputname -fno-stack-protector
 * [ret2libc with a Buffer Overflow BY Live Overflow](https://www.youtube.com/watch?v=m17mV24TgwY)
 * [Defeating a non-executable stack pdf](https://www.shellblade.net/docs/ret2libc.pdf)
 ---
-- *"**Vamo ownar o mundo, porquê alcançar a paz tá difícil pra cassete.**"*
+-- *"**Vamo ownar o mundo, porquê alcançar a paz tá difícil pra cassete.**"*
             
-    Luther King, MARTIN 1940.
+ . Luther King, MARTIN 1940.
