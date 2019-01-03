@@ -3,7 +3,7 @@
 
 # WTF is ret2libc?
 *Após um certo tempo exploração stack-based overflow tradicional, a curiosidade em desbravar novas possibilidades sempre surge. Caso nunca dantes tenha tido quaisquer questionamentos, deixe-me que lhe apresente uma questão:*
-*Como bem sabe-se, a exploração tradicional consiste em executarmos um shellcode que empilhamos na stack. Certo, mas, e se a pilha não for executável? Desta forma, de nada nos seria útil retornar o shellcode, pois o mesmo nunca seria executado. O nome deste bloqueio é [NX bit(Non eXecute)](http://en.wikipedia.org/wiki/NX_bit), E neste pequeno tutorial, o objetivo é exemplificar como podemos dar um certo bypass e ter uma execução de código arbitrário, não no próprio **NXbit**, haja vista que o mesmo é definido em tempo de compilação, e, o nosso exemplo utiliza apernas uma simples verificação condicional. Semelhante, porém não igual. *
+*Como bem sabe-se, a exploração tradicional consiste em executarmos um shellcode que empilhamos na stack. Certo, mas, e se a pilha não for executável? Desta forma, de nada nos seria útil retornar o shellcode, pois o mesmo nunca seria executado. O nome deste bloqueio é [NX bit(Non eXecute)](http://en.wikipedia.org/wiki/NX_bit), E neste pequeno tutorial, o objetivo é exemplificar como podemos dar um certo bypass e ter uma execução de código arbitrário, não no próprio **NXbit**, haja vista que o mesmo é definido em tempo de compilação, e, o nosso exemplo utiliza apernas uma simples verificação condicional. Semelhante, porém não igual.*
 *Então, recomendo que pegue pipoca, algo para beber e se sente, pois temos um caminho deveras cansativo de explicação e exemplificação.*
 ## Let's Start
 
