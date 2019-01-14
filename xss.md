@@ -218,7 +218,7 @@ _Como visto acima, podemos utilizar o **document.location** para criar um redire
 
     <script>document.location = 'http://127.0.0.1/confiavel.html</script>
 
- _O código de **confiável.html** precisa realizar a request original de redefinição de senha. _
+ _O código de **confiável.html** precisa realizar a request original de redefinição de senha._
 
 _No exemplo *dvwa*:_
 
